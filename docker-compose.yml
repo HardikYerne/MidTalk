@@ -1,0 +1,45 @@
+services:
+  mongodb:
+    image: mongo:8
+    restart: unless-stopped
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: platform
+      MONGO_INITDB_ROOT_PASSWORD: platform_dev_password
+      MONGO_INITDB_DATABASE: platform
+    ports: ["27017:27017"]
+    volumes: [mongodb_data:/data/db]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "try { rs.status().ok } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'localhost:27017'}]}).ok }" ]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "redis_dev_password", "--appendonly", "yes"]
+    ports: ["6379:6379"]
+    volumes: [redis_data:/data]
+  livekit:
+    image: livekit/livekit-server:latest
+    restart: unless-stopped
+    command: ["--dev", "--bind", "0.0.0.0"]
+    ports: ["7880:7880", "7881:7881", "7882:7882/udp"]
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: platform_minio
+      MINIO_ROOT_PASSWORD: replace_this_local_password
+    ports: ["9000:9000", "9001:9001"]
+    volumes: [minio_data:/data]
+  minio-init:
+    image: minio/mc:latest
+    depends_on: [minio]
+    volumes: ["./infrastructure/minio/cors.xml:/config/cors.xml:ro"]
+    entrypoint: ["/bin/sh", "-c", "until mc alias set local http://minio:9000 platform_minio replace_this_local_password; do sleep 2; done; mc mb --ignore-existing local/platform-files; mc cors set local/platform-files /config/cors.xml"]
+volumes:
+  mongodb_data:
+  redis_data:
+  minio_data:

@@ -1,0 +1,22 @@
+{
+  "name": "private-collaboration-platform",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @platform/api --filter @platform/web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "dev:api": "pnpm --filter @platform/api dev",
+    "dev:web": "pnpm --filter @platform/web dev",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down",
+    "dev:collaboration": "pnpm --filter @platform/collaboration-server dev",
+    "build:collaboration": "pnpm --filter @platform/collaboration-server build",
+    "dev:all": "pnpm --parallel --filter @platform/api --filter @platform/web --filter @platform/collaboration-server dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

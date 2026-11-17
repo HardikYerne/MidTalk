@@ -1,0 +1,6 @@
+packages:
+  - 'frontend'
+  - 'backend'
+  - 'backend/collaboration-server'
+  - 'frontend/vscode-extension'
+  - 'packages/*'
