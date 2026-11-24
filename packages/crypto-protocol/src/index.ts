@@ -1,0 +1,4 @@
+/** Contract only: wire this to a reviewed Signal Protocol implementation before enabling E2EE. */
+export type SignalPreKeyBundle={identityKey:Uint8Array;registrationId:number;deviceId:number;signedPreKey:{keyId:number;publicKey:Uint8Array;signature:Uint8Array};oneTimePreKey?:{keyId:number;publicKey:Uint8Array}};
+export interface SignalSessionAdapter{processPreKeyBundle(recipientId:string,bundle:SignalPreKeyBundle):Promise<void>;encrypt(recipientId:string,plaintext:Uint8Array):Promise<{ciphertext:Uint8Array;type:'PREKEY'|'WHISPER'}>;decrypt(senderId:string,ciphertext:Uint8Array,type:'PREKEY'|'WHISPER'):Promise<Uint8Array>;}
+export function assertSignalAdapter(adapter:SignalSessionAdapter|undefined):asserts adapter is SignalSessionAdapter{if(!adapter)throw new Error('E2EE is disabled: a reviewed Signal Protocol adapter has not been installed and security-reviewed.');}
