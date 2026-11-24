@@ -1,2 +1,2 @@
-import WorkspaceFrame from "../../../components/common/WorkspaceFrame";
-export default function Page() { return <WorkspaceFrame section="contacts" />; }
+import ConnectionsPage from "../../../components/people/ConnectionsPage";
+export default function Page() { return <ConnectionsPage />; }

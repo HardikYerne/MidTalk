@@ -1,2 +1,3 @@
-import WorkspaceFrame from "../../../components/common/WorkspaceFrame";
-export default function Page() { return <WorkspaceFrame section="auth" />; }
+import { Suspense } from "react";
+import AuthForm from "../../../components/auth/AuthForm";
+export default function Page() { return <Suspense><AuthForm mode="login" /></Suspense>; }

@@ -1,2 +1,2 @@
-import WorkspaceFrame from "../../../components/common/WorkspaceFrame";
-export default function Page() { return <WorkspaceFrame section="settings" />; }
+import SettingsPage from "../../../components/settings/SettingsPage";
+export default function Page() { return <SettingsPage />; }
